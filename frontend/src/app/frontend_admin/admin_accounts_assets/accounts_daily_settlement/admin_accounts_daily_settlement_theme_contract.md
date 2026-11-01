@@ -1,20 +1,19 @@
-# admin_accounting_daily_settlement — Theme Contract
+# Theme Contract — Admin Accounts Daily Settlement
 
-## Source-derived tokens
-bg-success-bg, bg-warning-bg, border-warning-bg, text-body, text-danger, text-info, text-sm, text-success, text-success-text, text-warning
+## Consumed Design Tokens
 
-## Responsive contract
-- Preserve the existing responsive classes and breakpoints in the local component closure.
-- Tables/data grids must retain their existing small-screen overflow or card-stack behavior; do not introduce horizontal page overflow.
-- Keep translated strings able to wrap; no fixed-width assumptions are added by this move.
+| UI Surface / Element | Token Class | Purpose |
+| :--- | :--- | :--- |
+| Page Canvas | `bg-canvas` | Top-level background |
+| Cards & Table Container | `bg-card`, `border-border` | Layer 1 surface elevation |
+| Table Header Row | `bg-muted/60`, `text-muted-foreground` | Header differentiation |
+| Table Row Hover | `hover:bg-muted/30` | Subtle interactive hover |
+| Focus Rings | `focus-visible:ring-2 focus-visible:ring-primary` | Accessible focus state |
+| Pending Status Badge | `bg-warning-bg`, `text-warning-text`, `border-warning/30` | Pending admin clearance |
+| Approved Status Badge | `bg-success-bg`, `text-success-text`, `border-success/30` | Approved & verified handover |
+| Discrepancy Badge | `bg-destructive/15`, `text-destructive`, `border-destructive/30` | Shortage or audit alert |
+| Primary Action Buttons | `bg-primary`, `text-on-primary`, `hover:bg-primary/90` | Main interactive actions |
+| Success Action Buttons | `bg-success`, `text-white`, `hover:bg-success/90` | Approve & clear handover |
+| Destructive Action Buttons | `bg-destructive`, `text-white`, `hover:bg-destructive/90` | Flag discrepancy |
+| Skeleton Loaders | `bg-surface-highlight`, `motion-safe:animate-pulse` | Loading layout skeleton |
 
-## Accessibility contract
-- Preserve programmatic labels, keyboard navigation, focus restoration, accessible status/error messages, and reduced-motion safeguards present in the source.
-- Color must not be the sole indicator of state.
-
-## Host theme boundary
-- Use the shared semantic design tokens already consumed by this source. Do not invent colors, raw hex values, or new token names.
-
-## V42 Additional Semantic Tokens (RBG16–20)
-
-Current leaf source references: `bg-card`, `bg-danger-bg`, `bg-input`, `bg-pay-bank-bg`, `bg-pay-card-bg`, `bg-pay-cash-bg`, `bg-pay-upi-bg`, `bg-primary`, `bg-primary-subtle`, `bg-success`, `bg-success-bg`, `bg-surface-highlight`, `bg-warning-bg`, `border-border`, `shadow-card`, `text-on-primary`, `text-on-success`, `text-pay-bank`, `text-pay-card`, `text-pay-cash`, `text-pay-upi`, `text-primary`, `text-secondary`, `text-warning`. These names are consumed as semantic Tailwind classes and resolve through the canonical global theme mapping; the list records usage and does not redefine token values. No feature-owned CSS rule is required for these utilities.

@@ -1,4 +1,6 @@
-// Ambient host contracts required when this autonomous sub-module is compiled in isolation.
+// contracts/host-stubs.d.ts
+// Ambient host contracts enabling 100% standalone compilation & execution when zipped
+
 declare module '@/lib/api' {
   export interface ApiSuccess<T> {
     success: true;
@@ -30,20 +32,7 @@ declare module '@/lib/logger' {
   };
 }
 
-declare module '@/lib/socket' {
-  export const socketService: {
-    subscribe: <T>(event: string, callback: (data: T) => void) => () => void;
-    emit: (event: string, payload: unknown) => void;
-  };
-}
-
 declare module '@/lib/display_value' {
   export function displayValue(value: unknown): string;
 }
 
-declare module '@/components/ui/*' {
-  import type React from 'react';
-  export type StubComponentProps = React.PropsWithChildren<Record<string, unknown>>;
-  const Component: React.FC<StubComponentProps>;
-  export default Component;
-}

@@ -6,7 +6,7 @@ import { MANAGER_MEMBERS_DIRECTORY_ROUTES } from '@/app/frontend_manager/manager
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 
-import { Search } from 'lucide-react';
+import { Eye, Search } from 'lucide-react';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
 import { ManagerMembersDirectoryEmptyState } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_states/ManagerMembersDirectoryEmptyState';
 import { ManagerMembersDirectorySupportingSections } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections';
@@ -20,12 +20,11 @@ import type { ManagerMembersDirectoryRouteQueryProps } from '@/app/frontend_mana
 export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersDirectoryRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const locale = useLocale();
-  const { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember } = useManagerMemberDirectoryPageState(_routeQuery);
+  const { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember, updateMember } = useManagerMemberDirectoryPageState(_routeQuery);
   const editIntent = _routeQuery.view === 'edit';
   const tabDestinations: Partial<Record<(typeof MANAGER_MEMBERS_TABS)[number]['name'], string>> = {
     'Add Member': MANAGER_MEMBERS_DIRECTORY_ROUTES.newAdmission,
     'Membership Renewal': MANAGER_MEMBERS_DIRECTORY_ROUTES.membershipRenewal,
-    'Member Documents': MANAGER_MEMBERS_DIRECTORY_ROUTES.memberDocuments,
   };
 
   const [page, setPage] = useState(0);
@@ -44,7 +43,8 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       data-route-id={_routeQuery.id}
       data-route-name={_routeQuery.name}
       data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+      data-route-smart-id={_routeQuery.smartId}
+      data-route-seat={_routeQuery.seat}>
       <ManagerMembersDirectoryHeader />
       <p role="status" data-testid="manager-members-demo-mode-banner" className="mb-5 rounded-xl border border-warning bg-warning-bg px-4 py-3 text-sm text-warning">
         {tManagerUi('demo_mode_existing_members_are_sample_records_new_member_014d0f')}
@@ -113,19 +113,43 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
                           <th scope="col" className="px-3 py-3">{tManagerUi('plan')}</th>
                           <th scope="col" className="px-3 py-3">{tManagerUi('status')}</th>
                           <th scope="col" className="px-3 py-3">{tManagerUi('expiry_date')}</th>
+                          <th scope="col" className="px-3 py-3 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {paginatedMembers.map((member) => {
                           const badge = MANAGER_MEMBERS_STATUS_BADGES[member.status];
                           return (
-                            <tr key={member.id} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
-                              <td className="px-3 py-3 align-middle"><span className="font-mono text-primary">{member.id}</span></td>
-                              <td className="px-3 py-3 align-middle font-bold text-primary">{member.name}</td>
+                            <tr
+                              key={member.id}
+                              onClick={() => {
+                                setProfileSearch(member.id);
+                                setActiveTab('Member Profile');
+                              }}
+                              className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 cursor-pointer transition-colors group"
+                              title={`Click to view profile of ${member.name} (${member.id})`}
+                            >
+                              <td className="px-3 py-3 align-middle"><span className="font-mono text-primary font-semibold group-hover:underline">{member.id}</span></td>
+                              <td className="px-3 py-3 align-middle font-bold text-primary group-hover:text-primary-hover">{member.name}</td>
                               <td className="px-3 py-3 align-middle">{maskManagerMemberPhone(member.phone)}</td>
                               <td className="px-3 py-3 align-middle"><span className="mgr-badge mgr-badge--info">{member.type}</span></td>
                               <td className="px-3 py-3 align-middle"><span className={`mgr-badge ${badge?.className ?? 'mgr-badge--neutral'}`}>{badge ? tManagerUi(badge.labelKey) : tManagerUi('status_unknown')}</span></td>
                               <td className="px-3 py-3 align-middle">{formatManagerMemberDirectoryCalendarDate(displayValue(member.expiryDate), locale)}</td>
+                              <td className="px-3 py-3 align-middle text-right">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setProfileSearch(member.id);
+                                    setActiveTab('Member Profile');
+                                  }}
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-primary hover:bg-primary hover:text-on-primary transition-colors"
+                                  title={`View profile of ${member.name}`}
+                                >
+                                  <Eye size={13} aria-hidden="true" />
+                                  <span>View Profile</span>
+                                </button>
+                              </td>
                             </tr>
                           );
                         })}
@@ -186,14 +210,13 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
 
           {/* MEMBER PROFILE */}
           {activeTab === 'Member Profile' && (
-            <>
-            {editIntent && <p className="mb-4 rounded-xl border border-warning bg-warning-bg px-4 py-3 text-sm text-warning" role="status" data-testid="manager-members-edit-contract-notice">{tManagerUi('profile_edit_unavailable_host_contract_not_supplied')}</p>}
             <ManagerMembersDirectoryProfileSection
               searchValue={profileSearch}
               onSearchChange={setProfileSearch}
               member={profileMember}
+              onUpdateMember={updateMember}
+              initialEdit={editIntent}
             />
-            </>
           )}
 
           <ManagerMembersDirectorySupportingSections activeTab={activeTab} />

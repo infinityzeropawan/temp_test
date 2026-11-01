@@ -7,6 +7,8 @@
 import { useAdminSubscriptionsPageState } from '@/app/frontend_admin/admin_finance/finance_subscriptions/hooks/useAdminFinanceSubscriptionsPageState';
 import { useTranslations } from 'next-intl';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useState, useMemo } from 'react';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 import { formatAdminSubscriptionsCurrency, formatDate } from '@/app/frontend_admin/admin_finance/finance_subscriptions/utils/AdminFinanceSubscriptionsFormat';
 import type { AdminSubscriptionsDemoSubscription, AdminSubscriptionsStatusFilter } from '@/app/frontend_admin/admin_finance/finance_subscriptions/types/AdminFinanceSubscriptionsTypes';
@@ -14,8 +16,8 @@ import { RefreshCw, Eye, Download, Upload, Printer, MessageSquare, Send, Mail } 
 import { serializeAdminSubscriptionsCsv } from '@/app/frontend_admin/admin_finance/finance_subscriptions/utils/AdminFinanceSubscriptionsCsvUtils';
 
 const STATUS_BADGE: Record<string, string> = {
-  active:    'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-success-bg text-success-text border-success-bg',
-  expired:   'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-danger-bg text-danger-text border-danger-bg',
+  active: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-success-bg text-success-text border-success-bg',
+  expired: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-danger-bg text-danger-text border-danger-bg',
   suspended: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-warning-bg text-warning-text border-warning-bg',
   cancelled: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-card text-text-secondary border-border',
 };
@@ -31,6 +33,9 @@ export function AdminSubscriptionsPage() {
   const t = useTranslations('ADMIN_SUBSCRIPTIONS');
   const isDemoMode = isFrontendDemoModeEnabled();
   const { statusFilter, setStatusFilter, planFilter, setPlanFilter, shiftFilter, setShiftFilter, rows } = useAdminSubscriptionsPageState(isDemoMode);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const paginatedRows = useMemo(() => rows.slice(page * pageSize, (page + 1) * pageSize), [rows, page, pageSize]);
   const exportCsv = () => {
     if (!isDemoMode) return;
     const blob = new Blob([serializeAdminSubscriptionsCsv(rows)], { type: 'text/csv;charset=utf-8;' });
@@ -54,40 +59,40 @@ export function AdminSubscriptionsPage() {
         </div>
         <div className="admin-shared-action-row" >
           <button type="button" data-testid="admin_subscriptions-page-control-001" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover" disabled title={t('IMPORT_UNAVAILABLE')}>
-            <Upload size={18} strokeWidth={2}/> {t('IMPORT')}
+            <Upload size={18} strokeWidth={2} /> {t('IMPORT')}
           </button>
           <button type="button" data-testid="admin_subscriptions-page-control-002" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover" disabled={!isDemoMode} title={!isDemoMode ? t('EXPORT_UNAVAILABLE') : undefined} onClick={exportCsv}>
-            <Download size={18} strokeWidth={2}/> {t('CSV')}
+            <Download size={18} strokeWidth={2} /> {t('CSV')}
           </button>
           <button type="button" data-testid="admin_subscriptions-page-control-003" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover" disabled={!isDemoMode} title={!isDemoMode ? t('PRINT_UNAVAILABLE') : undefined} onClick={() => window.print()}>
-            <Printer size={18} strokeWidth={2}/> {t('PRINT')}
+            <Printer size={18} strokeWidth={2} /> {t('PRINT')}
           </button>
-          <button type="button" data-testid="admin_subscriptions-page-control-004" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-success"  disabled title={t('WHATSAPP_UNAVAILABLE')}>
-            <MessageSquare size={18} strokeWidth={2}/> {t('WHATSAPP')}
+          <button type="button" data-testid="admin_subscriptions-page-control-004" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-success" disabled title={t('WHATSAPP_UNAVAILABLE')}>
+            <MessageSquare size={18} strokeWidth={2} /> {t('WHATSAPP')}
           </button>
-          <button type="button" data-testid="admin_subscriptions-page-control-005" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-info"  disabled title={t('TELEGRAM_UNAVAILABLE')}>
-            <Send size={18} strokeWidth={2}/> {t('TELEGRAM')}
+          <button type="button" data-testid="admin_subscriptions-page-control-005" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-info" disabled title={t('TELEGRAM_UNAVAILABLE')}>
+            <Send size={18} strokeWidth={2} /> {t('TELEGRAM')}
           </button>
-          <button type="button" data-testid="admin_subscriptions-page-control-006" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-primary"  disabled title={t('EMAIL_UNAVAILABLE')}>
-            <Mail size={18} strokeWidth={2}/> {t('EMAIL')}
+          <button type="button" data-testid="admin_subscriptions-page-control-006" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-primary" disabled title={t('EMAIL_UNAVAILABLE')}>
+            <Mail size={18} strokeWidth={2} /> {t('EMAIL')}
           </button>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <select data-testid="admin_subscriptions-page-control-007" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_STATUS')} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as AdminSubscriptionsStatusFilter)}>
+        <select data-testid="admin_subscriptions-page-control-007" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_STATUS')} value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value as AdminSubscriptionsStatusFilter); setPage(0); }}>
           <option value="all">{t('ALL_STATUS')}</option>
           <option value="active">{t('STATUS_ACTIVE')}</option>
           <option value="expired">{t('STATUS_EXPIRED')}</option>
           <option value="suspended">{t('STATUS_SUSPENDED')}</option>
           <option value="cancelled">{t('STATUS_CANCELLED')}</option>
         </select>
-        <select data-testid="admin_subscriptions-page-control-008" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_PLAN')} value={planFilter} onChange={(e) => setPlanFilter(e.target.value)}>
+        <select data-testid="admin_subscriptions-page-control-008" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_PLAN')} value={planFilter} onChange={(e) => { setPlanFilter(e.target.value); setPage(0); }}>
           <option value="all">{t('ALL_PLANS')}</option>
           <option value="Basic Plan">{t('PLAN_BASIC')}</option>
           <option value="Premium Plan">{t('PLAN_PREMIUM')}</option>
         </select>
-        <select data-testid="admin_subscriptions-page-control-009" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_SHIFT')} value={shiftFilter} onChange={(e) => setShiftFilter(e.target.value)}>
+        <select data-testid="admin_subscriptions-page-control-009" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_SHIFT')} value={shiftFilter} onChange={(e) => { setShiftFilter(e.target.value); setPage(0); }}>
           <option value="all">{t('ALL_SHIFTS')}</option>
           <option value="Morning">{t('SHIFT_MORNING')}</option>
           <option value="Evening">{t('SHIFT_EVENING')}</option>
@@ -122,9 +127,9 @@ export function AdminSubscriptionsPage() {
         ))}
       </div>
       <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card overflow-x-auto hidden md:block">
-        <table className="w-full">
+        <table className="w-full text-left">
           <thead>
-            <tr className="bg-surface-highlight text-caption text-text-secondary">
+            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
               <th scope="col" className="text-left py-3 px-4">{t('STUDENT')}</th>
               <th scope="col" className="text-left py-3 px-4">{t('SMART_ID')}</th>
               <th scope="col" className="text-left py-3 px-4">{t('PLAN')}</th>
@@ -151,8 +156,8 @@ export function AdminSubscriptionsPage() {
                 </td>
               </tr>
             ) : (
-              rows.map((s) => (
-                <tr key={s.id} className="motion-safe:transition-colors hover:bg-primary-subtle border-b border-border text-text-primary">
+              paginatedRows.map((s) => (
+                <tr key={s.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
                   <td className="py-3 px-4 text-body font-semibold text-text-primary">{s.studentName}</td>
                   <td className="py-3 px-4 font-mono text-caption text-text-secondary">{s.smartId}</td>
                   <td className="py-3 px-4 text-body text-text-primary">{s.plan}</td>
@@ -188,7 +193,7 @@ export function AdminSubscriptionsPage() {
                         disabled
                         title={t('DETAIL_UNAVAILABLE', { name: s.studentName })}
                       >
-                        <Eye size={18} strokeWidth={2}/> {t('VIEW')}
+                        <Eye size={18} strokeWidth={2} /> {t('VIEW')}
                       </button>
                     </div>
                   </td>
@@ -197,6 +202,18 @@ export function AdminSubscriptionsPage() {
             )}
           </tbody>
         </table>
+        {rows.length > 0 && (
+          <AdminTablePagination
+            page={page}
+            pageSize={pageSize}
+            totalCount={rows.length}
+            onPageChange={setPage}
+            onPageSizeChange={(newSize: number) => {
+              setPageSize(newSize);
+              setPage(0);
+            }}
+          />
+        )}
       </div>
     </div>
   );

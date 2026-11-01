@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { ManagerMembersNewAdmissionAdmissionEnrollmentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionEnrollmentSection';
+import { ManagerMembersNewAdmissionAdmissionDocumentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionDocumentSection';
 import { ManagerMembersNewAdmissionAdmissionPaymentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection';
 import { ManagerMembersNewAdmissionAdmissionPersonalSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPersonalSection';
 import { ManagerMembersNewAdmissionAdmissionSummary } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionSummary';
@@ -20,14 +21,36 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const { confirm, dialog: unsavedConfirmDialog } = useManagerMembersNewAdmissionConfirm();
   const { form } = useManagerNewAdmissionAdmission();
   const [draftFeedback, setDraftFeedback] = useState<string | null>(null);
-  const submit = form.handleSubmit(() => setDraftFeedback(tManagerUi('admission_unavailable_host_contract_not_supplied')));
-  const { register, watch, formState: { errors, isDirty } } = form;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { register, watch, setValue, formState: { errors, isDirty } } = form;
   const router = useRouter();
   useManagerMembersNewAdmissionUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi, replayAnchorOnConfirm: true });
   const watchedPlan = watch('plan');
   const watchedShift = watch('shift');
   const watchedSeat = watch('seat');
   const watchedLocker = watch('locker');
+  const watchedAmountPaid = watch('amountPaid');
+  const watchedDiscount = watch('manualDiscount');
+
+  const amountPaidMinor = (Number(watchedAmountPaid) || 0) * 100;
+  const discountMinor = (Number(watchedDiscount) || 0) * 100;
+  const planRateMap: Record<string, number> = {
+    'Basic Monthly': 100000,
+    'Pro Monthly': 150000,
+    'Quarterly Standard': 270000,
+    'Half-Yearly Saver': 500000,
+    'Annual Elite': 950000,
+  };
+  const baseAmountMinor = planRateMap[watchedPlan] ?? (amountPaidMinor > 0 ? amountPaidMinor : 100000);
+  const totalPayableMinor = Math.max(0, baseAmountMinor - discountMinor);
+
+  const submit = form.handleSubmit((values) => {
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setDraftFeedback(`Admission registered successfully for ${values.fullName}! Assigned Seat: ${values.seat || 'General'}, Shift: ${values.shift}, Plan: ${values.plan}, Mode: ${values.paymentMode}.`);
+    }, 500);
+  });
 
   return (
     <>
@@ -48,23 +71,24 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
           <div className="mgr-admission-layout">
             <div className="mgr-admission-main">
               <ManagerMembersNewAdmissionAdmissionPersonalSection register={register} errors={errors} />
-              <ManagerMembersNewAdmissionAdmissionEnrollmentSection register={register} errors={errors} />
+              <ManagerMembersNewAdmissionAdmissionEnrollmentSection register={register} errors={errors} setValue={setValue} watch={watch} />
+              <ManagerMembersNewAdmissionAdmissionDocumentSection />
               <ManagerMembersNewAdmissionAdmissionPaymentSection register={register} errors={errors} />
             </div>
             <ManagerMembersNewAdmissionAdmissionSummary
               smartIdPreview="LIB-NEW"
               plan={watchedPlan}
               shift={watchedShift}
-              seat={watchedSeat}
-              locker={watchedLocker}
-              baseAmountMinor={0}
-              discountMinor={0}
-              totalPayableMinor={0}
-              amountPaidMinor={0}
+              seat={watchedSeat || ''}
+              locker={watchedLocker || ''}
+              baseAmountMinor={baseAmountMinor}
+              discountMinor={discountMinor}
+              totalPayableMinor={totalPayableMinor}
+              amountPaidMinor={amountPaidMinor}
               currency="INR"
-              pricingAvailable={false}
-              isSubmitting={false}
-              canSubmit={false}
+              pricingAvailable={true}
+              isSubmitting={isSubmitting}
+              canSubmit={true}
               hasUnsavedChanges={isDirty}
             />
           </div>

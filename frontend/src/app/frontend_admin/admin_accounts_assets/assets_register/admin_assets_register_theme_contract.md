@@ -1,41 +1,18 @@
-# admin_accounting_assets — Theme Contract
+# Theme Contract — Admin Assets Register
 
-## Source-derived tokens
+## Consumed Design Tokens
 
-bg-card
-bg-danger
-bg-danger-bg
-bg-input
-bg-primary
-bg-success-bg
-bg-surface-highlight
-bg-surface-zebra
-bg-warning-bg
-border-border
-border-warning-bg
-ring-primary
-shadow-card
-text-caption
-text-danger
-text-info
-text-kpi
-text-on-danger
-text-on-primary
-text-page-title
-text-primary
-text-secondary
-text-section-title
-text-success
-text-warning
+| UI Surface / Element | Token Class | Purpose |
+| :--- | :--- | :--- |
+| Page Canvas | `bg-canvas` | Top-level background |
+| Cards & Table Container | `bg-card`, `border-border` | Layer 1 surface elevation |
+| Table Header Row | `bg-muted/60`, `text-muted-foreground` | Header differentiation |
+| Table Row Hover | `hover:bg-muted/30` | Subtle interactive hover |
+| Focus Rings | `focus-visible:ring-2 focus-visible:ring-primary` | Accessible focus state |
+| Active AMC Badge | `bg-success-bg`, `text-success-text`, `border-success/30` | Active vendor contract |
+| OEM Warranty Badge | `bg-blue-500/10`, `text-blue-600`, `border-blue-500/30` | Manufacturer warranty |
+| Expired / No AMC Badge | `bg-destructive/15`, `text-destructive`, `border-destructive/30` | Unprotected asset alert |
+| Expiring Soon Alert | `bg-amber-500/15`, `text-amber-700` | <= 30 days to warranty expiry |
+| Primary Action Buttons | `bg-primary`, `text-primary-foreground`, `hover:bg-primary/90` | Main interactive actions |
+| Skeleton Loaders | `bg-surface-highlight`, `motion-safe:animate-pulse` | Loading layout skeleton |
 
-## Responsive contract
-- Preserve the existing responsive classes and breakpoints in the local component closure.
-- Tables/data grids must retain their existing small-screen overflow or card-stack behavior; do not introduce horizontal page overflow.
-- Keep translated strings able to wrap; no fixed-width assumptions are added by this move.
-
-## Accessibility contract
-- Preserve programmatic labels, keyboard navigation, focus restoration, accessible status/error messages, and reduced-motion safeguards present in the source.
-- Color must not be the sole indicator of state.
-
-## Host theme boundary
-- Use the shared semantic design tokens already consumed by this source. Do not invent colors, raw hex values, or new token names.

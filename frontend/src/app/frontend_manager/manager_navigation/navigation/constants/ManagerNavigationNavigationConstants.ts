@@ -5,11 +5,10 @@ import { MANAGER_MEMBERS_DIRECTORY_ROUTES as MANAGER_MEMBER_DIRECTORY_ROUTES } f
 import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES as MANAGER_NEW_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.url_config';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES as MANAGER_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
 import { MANAGER_MEMBERS_ALUMNI_ROUTES as MANAGER_ALUMNI_ROUTES } from '@/app/frontend_manager/manager_members/members_alumni/config/manager_members_alumni.url_config';
+import { MANAGER_MEMBERS_REFERRAL_BONUS_ROUTES } from '@/app/frontend_manager/manager_members/members_referral_bonus/config/manager_members_referral_bonus.url_config';
 import { MANAGER_MEMBERS_DOCUMENT_VAULT_ROUTES as MANAGER_DOCUMENT_VAULT_ROUTES } from '@/app/frontend_manager/manager_members/members_document_vault/config/manager_members_document_vault.url_config';
-import { MANAGER_MEMBERS_REFERRAL_BONUS_ROUTES as MANAGER_REFERRAL_BONUS_ROUTES } from '@/app/frontend_manager/manager_members/members_referral_bonus/config/manager_members_referral_bonus.url_config';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES as MANAGER_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { MANAGER_SEATS_MATRIX_ROUTES as MANAGER_SEAT_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
-import { MANAGER_SEATS_MANAGEMENT_ROUTES as MANAGER_SEATS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/config/manager_seats_management.url_config';
 import { MANAGER_SHIFTS_MANAGEMENT_ROUTES as MANAGER_SHIFTS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_management/config/manager_shifts_management.url_config';
 import { MANAGER_SHIFTS_MIGRATION_ROUTES as MANAGER_SHIFT_MIGRATION_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/config/manager_shifts_migration.url_config';
 import { MANAGER_SEATS_ALLOCATIONS_ROUTES as MANAGER_ALLOCATIONS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_allocations/config/manager_seats_allocations.url_config';
@@ -48,7 +47,6 @@ import { MANAGER_SETTINGS_HELP_SUPPORT_ROUTES as MANAGER_HELP_SUPPORT_ROUTES } f
 import { MANAGER_SETTINGS_BRANCH_INFO_ROUTES as MANAGER_BRANCH_INFO_ROUTES } from '@/app/frontend_manager/manager_settings/settings_branch_info/config/manager_settings_branch_info.url_config';
 import {
   AlertCircle,
-  Armchair,
   ArrowLeftRight,
   Award,
   BarChart,
@@ -118,6 +116,7 @@ export type ManagerNavigationLabelKey =
   | 'nav_expenses'
   | 'nav_fines_payments'
   | 'nav_group_admission'
+  | 'nav_help_support'
   | 'nav_holiday_calendar'
   | 'nav_id_card_generator'
   | 'nav_invoice'
@@ -164,14 +163,10 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_NEW_ADMISSION_ROUTES.root, icon: UserPlus, labelKey: 'nav_new_admission' },
   { kind: 'link', href: MANAGER_GROUP_ADMISSION_ROUTES.root, icon: Users2, labelKey: 'nav_group_admission' },
   { kind: 'link', href: MANAGER_ALUMNI_ROUTES.root, icon: UserCheck, labelKey: 'nav_alumni' },
-  { kind: 'link', href: MANAGER_DOCUMENT_VAULT_ROUTES.root, icon: FolderOpen, labelKey: 'nav_document_vault' },
-  { kind: 'link', href: MANAGER_REFERRAL_BONUS_ROUTES.root, icon: Award, labelKey: 'nav_referral_bonus' },
+  { kind: 'link', href: MANAGER_MEMBERS_REFERRAL_BONUS_ROUTES.root, icon: Award, labelKey: 'nav_referral_bonus' },
   { kind: 'link', href: MANAGER_ID_CARD_GENERATOR_ROUTES.root, icon: CreditCard, labelKey: 'nav_id_card_generator' },
   { kind: 'group', labelKey: 'group_seats_shifts' },
   { kind: 'link', href: MANAGER_SEAT_MATRIX_ROUTES.root, icon: LayoutGrid, labelKey: 'nav_seat_matrix' },
-  { kind: 'link', href: MANAGER_SEATS_ROUTES.root, icon: Armchair, labelKey: 'nav_seats' },
-  { kind: 'link', href: MANAGER_SHIFTS_ROUTES.root, icon: RefreshCw, labelKey: 'nav_shifts' },
-  { kind: 'link', href: MANAGER_SHIFT_MIGRATION_ROUTES.root, icon: ArrowLeftRight, labelKey: 'nav_shift_migration' },
   { kind: 'link', href: MANAGER_ALLOCATIONS_ROUTES.root, icon: ClipboardList, labelKey: 'nav_allocations' },
   { kind: 'link', href: MANAGER_SEAT_HISTORY_ROUTES.root, icon: History, labelKey: 'nav_seat_history' },
   { kind: 'link', href: MANAGER_LOCKERS_ROUTES.root, icon: Lock, labelKey: 'nav_lockers' },
@@ -180,22 +175,15 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_FINANCE_COLLECT_FEE_ROUTES.root, icon: IndianRupee, labelKey: 'nav_collect_fee' },
   { kind: 'link', href: MANAGER_FINANCE_SUBSCRIPTIONS_ROUTES.root, icon: FileText, labelKey: 'nav_subscriptions' },
   { kind: 'link', href: MANAGER_FINANCE_RENEWALS_ROUTES.root, icon: RotateCcw, labelKey: 'nav_renewals' },
-  { kind: 'link', href: MANAGER_PAYMENTS_ROUTES.root, icon: CreditCard, labelKey: 'nav_payments' },
   { kind: 'link', href: MANAGER_FINANCE_PAYMENT_PROMISES_ROUTES.root, icon: Handshake, labelKey: 'nav_payment_promises' },
   { kind: 'link', href: MANAGER_FINANCE_TRUST_SCORES_ROUTES.root, icon: Shield, labelKey: 'nav_trust_scores' },
   { kind: 'link', href: MANAGER_FINANCE_SECURITY_DEPOSITS_ROUTES.root, icon: Wallet, labelKey: 'nav_security_deposits' },
-  { kind: 'link', href: MANAGER_FINANCE_LATE_FEES_ROUTES.root, icon: Clock, labelKey: 'nav_late_fees' },
   { kind: 'link', href: MANAGER_FINES_PAYMENTS_ROUTES.root, icon: AlertCircle, labelKey: 'nav_fines_payments' },
   { kind: 'link', href: MANAGER_FINANCE_AUTO_SUSPEND_ROUTES.root, icon: Ban, labelKey: 'nav_auto_suspend' },
-  { kind: 'link', href: MANAGER_INVOICE_ROUTES.root, icon: Receipt, labelKey: 'nav_invoice' },
-  { kind: 'link', href: MANAGER_RECEIPT_ROUTES.root, icon: BookOpen, labelKey: 'nav_receipt' },
-  { kind: 'link', href: MANAGER_FINANCE_REFERRALS_ROUTES.root, icon: Award, labelKey: 'nav_referrals' },
-  { kind: 'link', href: MANAGER_REFUNDS_ROUTES.root, icon: DollarSign, labelKey: 'nav_refunds' },
   { kind: 'group', labelKey: 'group_operations' },
   { kind: 'link', href: MANAGER_ATTENDANCE_ROUTES.root, icon: CalendarCheck, labelKey: 'nav_attendance' },
   { kind: 'link', href: MANAGER_ABSENTEE_REPORT_ROUTES.root, icon: ClipboardCheck, labelKey: 'nav_absentee_report' },
   { kind: 'link', href: MANAGER_QR_SCANNER_ROUTES.root, icon: QrCode, labelKey: 'nav_qr_scanner' },
-  { kind: 'link', href: MANAGER_HOLIDAY_CALENDAR_ROUTES.root, icon: Calendar, labelKey: 'nav_holiday_calendar' },
   { kind: 'group', labelKey: 'group_accounts_assets' },
   { kind: 'link', href: MANAGER_ACCOUNTS_EXPENSES_ROUTES.root, icon: TrendingUp, labelKey: 'nav_expenses' },
   { kind: 'link', href: MANAGER_ACCOUNTS_DAILY_SETTLEMENT_ROUTES.root, icon: Receipt, labelKey: 'nav_daily_settlement' },
@@ -203,13 +191,12 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_ASSETS_REGISTER_ROUTES.root, icon: BarChart, labelKey: 'nav_assets' },
   { kind: 'link', href: MANAGER_ASSETS_MAINTENANCE_ROUTES.root, icon: BarChart, labelKey: 'nav_asset_maintenance' },
   { kind: 'group', labelKey: 'group_communication' },
-  { kind: 'link', href: MANAGER_NOTICES_ROUTES.root, icon: Bell, labelKey: 'nav_notices' },
   { kind: 'link', href: MANAGER_COMPLAINTS_ROUTES.root, icon: MessageSquare, labelKey: 'nav_complaints' },
   { kind: 'link', href: MANAGER_NOTIFICATION_CENTER_ROUTES.root, icon: BellRing, labelKey: 'nav_notification_center' },
   { kind: 'link', href: MANAGER_WHATSAPP_LOGS_ROUTES.root, icon: Smartphone, labelKey: 'nav_whatsapp_logs' },
   { kind: 'link', href: MANAGER_WHATSAPP_TEMPLATES_ROUTES.root, icon: Smartphone, labelKey: 'nav_whatsapp_templates' },
   { kind: 'group', labelKey: 'group_help_support' },
-  { kind: 'link', href: MANAGER_HELP_SUPPORT_ROUTES.root, icon: LifeBuoy, labelKey: 'group_help_support' },
+  { kind: 'link', href: MANAGER_HELP_SUPPORT_ROUTES.root, icon: LifeBuoy, labelKey: 'nav_help_support' },
   { kind: 'group', labelKey: 'group_settings' },
   { kind: 'link', href: MANAGER_BRANCH_INFO_ROUTES.root, icon: Building, labelKey: 'nav_branch_info' },
 ];

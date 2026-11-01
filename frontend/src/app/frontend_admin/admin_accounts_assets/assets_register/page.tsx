@@ -1,5 +1,6 @@
-import AdminAssetsRegisterRoute from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterRoute';
+import { AdminAssetsRegisterPage } from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterPage';
 
-export default function AdminAssetsRegisterPageEntry() {
-  return <AdminAssetsRegisterRoute />;
+export default function AdminAssetsRegisterRoute() {
+  return <AdminAssetsRegisterPage />;
 }
+

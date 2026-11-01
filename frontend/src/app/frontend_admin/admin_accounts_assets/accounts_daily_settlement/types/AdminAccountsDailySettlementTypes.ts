@@ -1,105 +1,60 @@
-import type { AdminAccountingExpenseCategoryColor } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/config/admin_accounts_daily_settlement.url_config';
-import type { AdminAccountsDailySettlementScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/tests/harness/bootstrap';
-import type { ReactNode } from 'react';
+// types/AdminAccountsDailySettlementTypes.ts
 
-/** Monetary fields in this module are stored in minor units (paise). */
+export type SettlementStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'DISCREPANCY_FLAGGED';
 
-export interface AdminAccountsDailySettlementEntry {
-  id: number;
+export interface DailySettlementRecord {
+  id: string;
   date: string;
-  shift: string;
-  openingBalance: number;
-  cashCollected: number;
-  upiCollected: number;
-  expenses: number;
-  closingBalance: number;
-  settledBy: string;
-  status: AdminAccountsDailySettlementEntryStatus;
+  branchId: string;
+  branchName: string;
+  shiftName: string;
+  managerId: string;
+  managerName: string;
+  openingCash: number; // in paise
+  cashCollected: number; // in paise
+  upiCollected: number; // in paise
+  expensesPaid: number; // in paise
+  expectedClosingCash: number; // in paise
+  actualHandoverCash: number; // in paise
+  difference: number; // in paise (actual - expected)
+  bankDepositSlipUrl?: string | null;
+  bankReferenceNumber?: string | null;
+  managerNotes?: string | null;
+  adminNotes?: string | null;
+  status: SettlementStatus;
+  createdAt: string;
+  approvedAt?: string | null;
+  approvedBy?: string | null;
 }
 
-export interface AdminAccountingAsset {
-  id: number;
-  name: string;
-  category: string;
-  purchaseDate: string;
-  purchaseValue: number;
-  currentValue: number;
-  location: string;
-  status: AdminAccountingAssetStatus;
+export interface DailySettlementKpiSummary {
+  expectedCashToday: number; // in paise
+  clearedCashToday: number; // in paise
+  pendingHandoverAmount: number; // in paise
+  discrepancyShortageAmount: number; // in paise
+  totalPendingCount: number;
+  totalFlaggedCount: number;
 }
 
-export interface AdminAccountingMaintenanceLog {
-  id: number;
-  assetName: string;
-  issue: string;
-  reportedDate: string;
-  scheduledDate: string;
-  vendor: string;
-  cost: number;
-  status: AdminAccountingMaintenanceLogStatus;
+export interface DailySettlementFilterParams {
+  branchId?: string;
+  status?: SettlementStatus | 'ALL';
+  startDate?: string;
+  endDate?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
 }
 
-export interface AdminAccountingExpense {
-  id: number;
-  date: string;
-  category: string;
-  description: string;
-  amount: number;
-  paidBy: string;
-  mode: AdminAccountingExpenseMode;
-  notes: string;
+export interface ApproveSettlementPayload {
+  settlementId: string;
+  adminNotes?: string;
+  verifiedCashAmount: number;
 }
 
-export interface AdminAccountingExpenseCategory {
-  id: number;
-  name: string;
-  budget: number;
-  spent: number;
-  color: AdminAccountingExpenseCategoryColor;
+export interface FlagDiscrepancyPayload {
+  settlementId: string;
+  discrepancyReason: string;
+  adminNotes: string;
 }
 
-export interface AdminAccountingSeatGapRow {
-  seatNo: string;
-  shift: string;
-  floor: string;
-  lastOccupied: string;
-  gapDays: number;
-  revenueLoss: number;
-  status: AdminAccountingSeatGapRowStatus;
-}
-
-export interface AdminAccountingShiftGap {
-  shift: string;
-  totalSeats: number;
-  occupied: number;
-  vacant: number;
-  occupancyPct: number;
-  avgGapDays: number;
-  revenueLoss: number;
-}
-
-export interface AdminAccountingDayGap {
-  date: string;
-  shift: string;
-  seatNo: string;
-  gapDays: number;
-  loss: number;
-}
-
-export interface AdminAccountingApiRecord {
-  id?: string | number;
-  [key: string]: unknown;
-}
-
-export type AdminAccountsDailySettlementEntryStatus = 'pending' | 'settled';
-export type AdminAccountingAssetStatus = 'active' | 'maintenance' | 'disposed';
-export type AdminAccountingMaintenanceLogStatus = 'pending' | 'in-progress' | 'completed';
-export type AdminAccountingExpenseMode = 'cash' | 'upi' | 'card' | 'bank';
-export type AdminAccountingSeatGapRowStatus = 'vacant' | 'maintenance';
-
-export type Entry = AdminAccountsDailySettlementEntry;
-
-export interface AdminAccountsDailySettlementHarnessProps {
-  children: ReactNode;
-  scenario?: AdminAccountsDailySettlementScenario;
-}

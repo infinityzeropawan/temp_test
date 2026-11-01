@@ -1,91 +1,82 @@
-/**
- * Canonical transport-level mock scenario registry for Admin Accounts Daily Settlement.
- *
- * Pass a real module-local populated fixture as `activeRecords`; the registry does not invent
- * business records, endpoints, permission rules, or DTOs. The returned values are scenario
- * descriptors/envelopes for a module-owned test adapter. They are not wired to production APIs.
- */
-export const createAdminAccountsDailySettlementScenarioCatalog = (activeRecords: unknown) => ({
-  ACTIVE_RECORDS: {
-    kind: 'http-response',
-    status: 200,
-    envelope: {
-      success: true,
-      message: 'Module-local populated fixture.',
-      data: activeRecords,
-      requestId: 'mock-active-records',
+// mocks/scenarios/admin_accounts_daily_settlement.scenarios.ts
+import {
+  ADMIN_DAILY_SETTLEMENT_FIXTURES,
+  ADMIN_DAILY_SETTLEMENT_KPI_FIXTURES,
+} from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/mocks/fixtures/admin_accounts_daily_settlement.fixtures';
+import type {
+  DailySettlementRecord,
+  DailySettlementKpiSummary,
+} from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
+
+export interface AdminDailySettlementScenarioState {
+  records: DailySettlementRecord[];
+  kpis: DailySettlementKpiSummary;
+  isLoading: boolean;
+  isError: boolean;
+  errorMessage?: string;
+}
+
+export const ADMIN_DAILY_SETTLEMENT_SCENARIOS = {
+  ACTIVE: {
+    records: ADMIN_DAILY_SETTLEMENT_FIXTURES,
+    kpis: ADMIN_DAILY_SETTLEMENT_KPI_FIXTURES,
+    isLoading: false,
+    isError: false,
+  },
+  EMPTY: {
+    records: [],
+    kpis: {
+      expectedCashToday: 0,
+      clearedCashToday: 0,
+      pendingHandoverAmount: 0,
+      discrepancyShortageAmount: 0,
+      totalPendingCount: 0,
+      totalFlaggedCount: 0,
     },
+    isLoading: false,
+    isError: false,
   },
-  EMPTY_DATA: {
-    kind: 'http-response',
-    status: 200,
-    envelope: {
-      success: true,
-      message: 'No records returned by the empty-result scenario.',
-      data: [],
-      requestId: 'mock-empty-data',
+  SERVER_500: {
+    records: [],
+    kpis: {
+      expectedCashToday: 0,
+      clearedCashToday: 0,
+      pendingHandoverAmount: 0,
+      discrepancyShortageAmount: 0,
+      totalPendingCount: 0,
+      totalFlaggedCount: 0,
     },
+    isLoading: false,
+    isError: true,
+    errorMessage: 'Internal Server Error (500): Settlement reconciliation service unavailable.',
   },
-  SERVER_500_ERROR: {
-    kind: 'http-response',
-    status: 500,
-    envelope: {
-      success: false,
-      message: 'Simulated internal server error.',
-      data: null,
-      errorCode: 'ERR_INTERNAL_500',
-      statusCode: 500,
-      requestId: 'mock-server-500',
+  TIMEOUT: {
+    records: [],
+    kpis: {
+      expectedCashToday: 0,
+      clearedCashToday: 0,
+      pendingHandoverAmount: 0,
+      discrepancyShortageAmount: 0,
+      totalPendingCount: 0,
+      totalFlaggedCount: 0,
     },
+    isLoading: false,
+    isError: true,
+    errorMessage: 'Gateway Timeout (504): Handover audit report took too long to respond.',
   },
-  NETWORK_TIMEOUT: {
-    kind: 'delayed-http-response',
-    delayMs: 15000,
-    status: 504,
-    envelope: {
-      success: false,
-      message: 'Simulated request timeout.',
-      data: null,
-      errorCode: 'ERR_TIMEOUT',
-      statusCode: 504,
-      requestId: 'mock-network-timeout',
+  UNAUTHORIZED: {
+    records: [],
+    kpis: {
+      expectedCashToday: 0,
+      clearedCashToday: 0,
+      pendingHandoverAmount: 0,
+      discrepancyShortageAmount: 0,
+      totalPendingCount: 0,
+      totalFlaggedCount: 0,
     },
+    isLoading: false,
+    isError: true,
+    errorMessage: 'Forbidden (403): You do not have SuperAdmin permission to audit or clear settlements.',
   },
-  UNAUTHORIZED_401: {
-    kind: 'http-response',
-    status: 401,
-    envelope: {
-      success: false,
-      message: 'Simulated unauthenticated request.',
-      data: null,
-      errorCode: 'ERR_UNAUTHORIZED',
-      statusCode: 401,
-      requestId: 'mock-unauthorized-401',
-    },
-  },
-  FORBIDDEN_403: {
-    kind: 'http-response',
-    status: 403,
-    envelope: {
-      success: false,
-      message: 'Simulated authenticated request without permission.',
-      data: null,
-      errorCode: 'ERR_FORBIDDEN',
-      statusCode: 403,
-      requestId: 'mock-forbidden-403',
-    },
-  },
-  NETWORK_ERROR: {
-    kind: 'transport-error',
-    transport: 'fetch-rejection',
-    message: 'Simulated network failure without an HTTP response.',
-  },
-  INVALID_RESPONSE: {
-    kind: 'malformed-success-envelope',
-    status: 200,
-    envelope: {
-      success: true,
-      message: 'Deliberately malformed response: required data and requestId are absent.',
-    },
-  },
-} as const);
+} as const satisfies Record<string, AdminDailySettlementScenarioState>;
+
