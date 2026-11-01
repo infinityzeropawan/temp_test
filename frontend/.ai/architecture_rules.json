@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Web Frontend Architecture & Development Rules",
+  "document": "WEB_FRONTEND_ARCHITECTURE_AND_DEVELOPMENT_RULES_V1.md",
+  "authorityRank": 4,
+  "coreMandates": {
+    "zeroFeatureEviction": {
+      "name": "Zero Feature Eviction Law",
+      "rule": "NEVER remove, delete, comment out, or un-wire half-built features, buttons, or form fields. If a feature or field exists without a schema, handler, or backend wire-up, the agent MUST complete the missing implementation end-to-end (add Zod field, add form binding, add error state, wire action/modal). Eviction is strictly forbidden."
+    },
+    "mandatoryConfirmDialogs": {
+      "name": "Accessible useConfirm Dialog Protocol",
+      "rule": "window.alert() and window.confirm() are strictly prohibited. Destructive actions, deletes, cancellations, and status transitions MUST use an accessible useConfirm modal dialog with explicit cancellation and confirm buttons, trapped focus, and ESC dismiss."
+    },
+    "formCompleteness": {
+      "name": "Form & Validation Standards",
+      "library": "React Hook Form v7 + Zod v3",
+      "requirements": [
+        "Every form field must bind via register() or Controller",
+        "Every field must render an inline fieldError component with role='alert' when invalid",
+        "aria-invalid must be programmatically set based on field errors",
+        "aria-required='true' on mandatory inputs",
+        "Labels must use htmlFor pointing to the field id",
+        "Submit buttons must show loading state and be disabled during pending submission"
+      ]
+    },
+    "fourteenFolderStandard": {
+      "name": "14-Folder Standard Submodule Directory Layout",
+      "folders": [
+        "components",
+        "hooks",
+        "services",
+        "types",
+        "schemas",
+        "utils",
+        "constants",
+        "contracts",
+        "contexts",
+        "dialogs",
+        "tables",
+        "forms",
+        "views",
+        "tests"
+      ]
+    },
+    "accessibility": {
+      "standard": "WCAG 2.2 AA",
+      "requirements": [
+        "All interactive touch targets must be at least 44x44px (min-h-11 min-w-11)",
+        "Non-color status indicators: Color alone must never convey state; status badges must include icons or text labels",
+        "Visible focus rings (focus-visible:ring-2 focus-visible:ring-offset-2)",
+        "Full keyboard navigability (Tab, Enter, Space, Escape, Arrows)",
+        "Proper landmarks (<header>, <nav>, <main>, <aside>, <footer>)",
+        "Screen-reader only labels (.sr-only) for icon-only action buttons"
+      ]
+    },
+    "stateManagement": {
+      "principles": [
+        "Server State: TanStack Query or Server Actions with proper cache revalidation",
+        "Client State: Zustand or dedicated Context providers for complex module state",
+        "Local State: useState for transient UI toggles",
+        "URL State: Nuqs or searchParams for table sorting, pagination, and filters"
+      ]
+    },
+    "resilienceAndErrorHandling": {
+      "requirements": [
+        "Every page and section must implement Loading Skeletons for pending states",
+        "Every table and list must implement an Empty State with actionable CTA when 0 records exist",
+        "Every network operation must provide toast notifications for success and error",
+        "Error boundaries at route and feature level"
+      ]
+    }
+  }
+}
+

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Frontend Role Module Create, Audit & Repair Workflow Engine",
+  "document": "FRONTEND_ROLE_MODULE_CREATE_AUDIT_REPAIR_V2_11.md",
+  "authorityRank": 6,
+  "version": "2.11 Final",
+  "quadModes": {
+    "MODE_A": {
+      "name": "Create (Web)",
+      "description": "Construct brand-new modules or sub-modules from scratch with strict adherence to 14-folder standard, Zod schemas, React Hook Form, and design tokens."
+    },
+    "MODE_B": {
+      "name": "Audit + Repair (Web)",
+      "description": "Exhaustive zero-sampling audit of existing web modules, generating actionable repair plans and executing non-destructive fixes under the Zero Feature Eviction Law."
+    },
+    "MODE_C": {
+      "name": "Cross-Platform Mobile Create",
+      "description": "Generate React Native/Expo mobile modules adhering to mobile tokens, AccessibilityInfo, and native gesture guidelines."
+    },
+    "MODE_D": {
+      "name": "Mobile Audit + Repair",
+      "description": "Audit and repair React Native mobile apps against mobile design tokens and platform safety requirements."
+    }
+  },
+  "zeroSamplingProtocol": {
+    "mandate": "Every single file, view, sub-component, button, modal, form input, state branch, and contract must be systematically inspected. Statistical or partial sampling is strictly prohibited.",
+    "verificationChecklist": [
+      "No unresolved TypeScript errors (npx tsc --noEmit must return 0)",
+      "No broken imports or missing module exports",
+      "No crude window.alert or window.confirm calls",
+      "No hardcoded non-theme colors",
+      "No unhandled pending, error, or empty states",
+      "All unit and integration tests passing"
+    ]
+  },
+  "evidenceClassification": {
+    "SOURCE_CONFLICT": "Conflicting rules between supplied specification files.",
+    "CONTRACT_CONFLICT": "Product or API contract conflicts with an applicable architectural rule.",
+    "BLOCKED_BY_SUPPLIED_SCOPE": "Required evidence or feature falls outside the user-supplied task boundary.",
+    "NOT_VERIFIED": "Insufficient available evidence to confirm compliance or failure.",
+    "BLOCKED_BY_SUPPLIED_CONTRACT": "Verified contract makes safe execution impossible without breaking invariants.",
+    "DEFERRED_TO_HOST_RUNTIME": "Missing host capability (e.g. live backend API or headless browser runner) is not an architectural failure."
+  },
+  "auditPhases": [
+    "Phase 1: Discovery & Cataloging (file tree, routes, types)",
+    "Phase 2: Contract Guard & Boundary Verification",
+    "Phase 3: Static Analysis & Schema Integrity (Zod, React Hook Form)",
+    "Phase 4: UI/UX Completeness & Accessibility (WCAG 2.2 AA, 44px touch targets, non-color indicators)",
+    "Phase 5: Non-Destructive Repair Execution (Zero Feature Eviction)",
+    "Phase 6: Verification Gate (Typecheck, Vitest, HTTP 200 Route Verification)"
+  ]
+}
+

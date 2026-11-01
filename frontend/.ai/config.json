@@ -1,0 +1,43 @@
+{
+  "name": "Library OS Frontend Architecture Engine",
+  "version": "2.11.0",
+  "activeRoles": [
+    "frontend_manager",
+    "frontend_admin"
+  ],
+  "platform": "web",
+  "stack": {
+    "framework": "Next.js 14 App Router",
+    "ui": "React 18 + Tailwind CSS",
+    "forms": "React Hook Form v7",
+    "validation": "Zod v3",
+    "state": "Zustand / React Context / Server Actions",
+    "testing": "Vitest + React Testing Library"
+  },
+  "masterPrecedenceOrder": [
+    "1. Security, privacy, legal, authorization, tenant isolation, and data-protection rules",
+    "2. Accessibility and browser platform safety requirements (WCAG 2.2 AA)",
+    "3. Explicit user-approved scope and verified API contracts",
+    "4. WEB_FRONTEND_ARCHITECTURE_AND_DEVELOPMENT_RULES_V1.md",
+    "5. WEB_FRONTEND_UI_UX_DESIGN.md for visual/token decisions",
+    "6. FRONTEND_ROLE_MODULE_CREATE_AUDIT_REPAIR_V2_11.md for execution workflow, audit sequencing, delivery artifacts, and reporting",
+    "7. Sub-module documentation trio (_features.md, _forbidden.md, _theme_contract.md)",
+    "8. Existing implementation conventions"
+  ],
+  "authoritativeDocuments": [
+    "Ai_Web_Mobile_project_development_instruction_documentation/WEB_FRONTEND_ARCHITECTURE_AND_DEVELOPMENT_RULES_V1.md",
+    "Ai_Web_Mobile_project_development_instruction_documentation/WEB_FRONTEND_UI_UX_DESIGN.md",
+    "Ai_Web_Mobile_project_development_instruction_documentation/FRONTEND_ROLE_MODULE_CREATE_AUDIT_REPAIR_V2_11.md"
+  ],
+  "registeredPlugin": "library-frontend-architecture",
+  "registeredSkill": "library-frontend-architect",
+  "inviolableLaws": {
+    "zeroFeatureEviction": true,
+    "mandatoryUseConfirmModal": true,
+    "reactHookFormZodStrict": true,
+    "semanticDesignTokensOnly": true,
+    "fourteenFolderStandard": true,
+    "wcag22AAAccessibility": true
+  }
+}
+
